@@ -1,0 +1,10 @@
+name: UserManager
+version: ${project.version}
+main: com.aidanmurphey.usermanager.UserManager
+authors: [Zee]
+description: A plugin for managing the groups, permissions, and economy of a server
+website: AidanMurphey.com
+
+commands:
+  umtest:
+    description: Temporary test command

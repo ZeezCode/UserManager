@@ -1,0 +1,67 @@
+#Welcome to UserManager!
+#Below is the plugin's configuration file
+#Feel free to edit its settings as you please
+
+#Database information (database is used for storing information pertaining to permissions, economy, etc.)
+database:
+  host: '127.0.0.1'
+  port: '3306'
+  name: 'user_manager'
+  user: 'root'
+  pass: ''
+
+#Economy information
+economy:
+  starting-balance: 100
+  currency-use-symbol: true
+  currency-symbol: '$'
+  currency-name: 'Dollar'
+  currency-name-plural: 'Dollars'
+  can-be-negative: false
+  minimum-money: -100
+  maximum-money: 100000000000000
+
+#Chat information
+chat:
+  format: '<%USER_NAME%> %MESSAGE%'
+
+#Player group information
+groups:
+  default:
+    default: true
+    permissions:
+    - minecraft.command.list
+    - -bukkit.command.plugins
+    - -bukkit.command.version
+    inherits: null
+    info:
+      canBuild: true
+      prefix: '&e[Member] '
+      suffix: ''
+  vip:
+    default: false
+    permissions: []
+    inherits: default
+    info:
+      canBuild: true
+      prefix: '&2[VIP] '
+      suffix: ''
+  staff:
+    default: false
+    permissions: []
+    inherits: vip
+    info:
+      canBuild: true
+      prefix: '&5[Staff] '
+      suffix: ''
+  owner:
+    default: false
+    permissions: []
+    inherits: staff
+    info:
+      canBuild: true
+      prefix: '&4[Owner] '
+
+extra:
+  should-show-first-join-alert: true
+  first-join-alert-message: '&cPlayer %USER_NAME% has joined for the first time! Everybody welcome them!'
