@@ -4,7 +4,14 @@ main: com.aidanmurphey.usermanager.UserManager
 authors: [Zee]
 description: A plugin for managing the groups, permissions, and economy of a server
 website: AidanMurphey.com
+load: STARTUP
 
 commands:
   umtest:
     description: Temporary test command
+    permission: um.test
+
+permissions:
+  um.test:
+    description: Gives access to temp test command
+    default: op

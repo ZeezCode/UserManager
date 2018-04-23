@@ -29,7 +29,7 @@ public class Group {
      * @return List<String> All of the permissions of a group and the permissions it gets through its parent
      */
     public static List<String> getPermissions(Group group) {
-        List<String> permissions = UserManager.getPlugin().getConfig().getStringList("groups." + group + ".permissions");
+        List<String> permissions = UserManager.getPlugin().getConfig().getStringList("groups." + group.getName() + ".permissions");
 
         Group inherits = group.getInherits();
         if (inherits == null)

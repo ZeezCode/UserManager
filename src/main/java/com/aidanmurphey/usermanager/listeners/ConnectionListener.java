@@ -1,6 +1,7 @@
 package com.aidanmurphey.usermanager.listeners;
 
 import com.aidanmurphey.usermanager.DatabaseHandler;
+import com.aidanmurphey.usermanager.Group;
 import com.aidanmurphey.usermanager.UMPlayer;
 import com.aidanmurphey.usermanager.UserManager;
 import org.bukkit.Bukkit;
@@ -11,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.permissions.PermissionAttachment;
 
 import java.util.Date;
 
@@ -37,11 +39,21 @@ public class ConnectionListener implements Listener {
                         .replaceAll("%USER_NAME%", p.getName());
                 Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', alertMsg));
             }
-        } else
+        } else //if player has joined the server before now
             umPlayer.setLastSeen(new Date().getTime() / 1000).save();
 
         //Add UMPlayer to registered players list
         UserManager.getRegisteredPlayers().add(umPlayer);
+
+        //Setup player's permissions
+        PermissionAttachment attachment = p.addAttachment(UserManager.getPlugin());
+        for (String permission : Group.getPermissions(umPlayer.getGroup())) {
+            if (permission.charAt(0) != '-') //permission doesn't start with - (add permission to user)
+                attachment.setPermission(permission, true);
+            else //permission starts with - (add new negative permission) to user
+                attachment.setPermission(permission.substring(1), false);
+        }
+        UserManager.addAttachment(p.getUniqueId(), attachment);
     }
 
     /**
@@ -50,7 +62,13 @@ public class ConnectionListener implements Listener {
      */
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent e) {
-        UMPlayer.getPlayer(e.getPlayer().getUniqueId()).handleDisconnect();
+        Player p = e.getPlayer();
+
+        //Save player's final data before they leave
+        UMPlayer.getPlayer(p.getUniqueId()).handleDisconnect();
+
+        //Remove player's attachment from local list
+        UserManager.removeAttachment(p.getUniqueId());
     }
 
 }
