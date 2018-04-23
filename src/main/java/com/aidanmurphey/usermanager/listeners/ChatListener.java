@@ -21,12 +21,11 @@ public class ChatListener implements Listener {
 
         Player p = e.getPlayer();
         Group group = UMPlayer.getPlayer(p.getUniqueId()).getGroup();
-        String nameFormat = group.getPrefix() + p.getName() + group.getSuffix();
+        String nameFormat = ChatColor.translateAlternateColorCodes('&', group.getPrefix() + p.getName() + group.getSuffix());
 
         chatFormat = chatFormat
                 .replaceAll("%USER_NAME%", nameFormat)
                 .replaceAll("%MESSAGE%", e.getMessage());
-        chatFormat = ChatColor.translateAlternateColorCodes('&', chatFormat);
 
         e.setFormat(chatFormat);
     }

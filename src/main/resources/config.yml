@@ -61,6 +61,7 @@ groups:
     info:
       canBuild: true
       prefix: '&4[Owner] '
+      suffix: ''
 
 extra:
   should-show-first-join-alert: true
