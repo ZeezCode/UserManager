@@ -17,9 +17,10 @@ economy:
   currency-symbol: '$'
   currency-name: 'Dollar'
   currency-name-plural: 'Dollars'
-  can-be-negative: false
-  minimum-money: -100
+  minimum-money: 0
   maximum-money: 100000000000000
+  get-money-message: '&aYou have received %AMOUNT% %CUR_NAME%!'
+  lose-money-message: '&aYou have spent %AMOUNT% %CUR_NAME%!'
 
 #Chat information
 chat:

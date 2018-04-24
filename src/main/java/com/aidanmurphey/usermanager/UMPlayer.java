@@ -2,6 +2,7 @@ package com.aidanmurphey.usermanager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.Date;
 import java.util.UUID;
@@ -78,10 +79,70 @@ public class UMPlayer {
      * @param balance The new balance of the user
      * @return UMPlayer Current instance of UMPlayer
      */
-    public UMPlayer setBalance(double balance) {
+    private UMPlayer setBalance(double balance) {
         this.balance = balance;
 
         return this;
+    }
+
+    /**
+     * Subtracts an amount of money from a player's balance
+     * Amount must be less than 0
+     * If amount - current balance is less than min allowed money, nothing will happen and method will return null
+     * @param amount Negative amount of money to be deposited
+     * @return UMPlayer Current instance of UMPlayer
+     */
+    public UMPlayer withdrawMoney(double amount) {
+        if (amount < 0) {
+            FileConfiguration config = UserManager.getPlugin().getConfig();
+            double curBalance = getBalance();
+            double min = config.getDouble("minimum-money");
+
+            if (curBalance - amount >= min) { //if cur amount plus deposit is at least min allowed, accept withdrawal
+                setBalance(curBalance - amount);
+
+                if (player.isOnline()) {
+                    String loseMoneyFormat = config.getString("economy.lose-money-message");
+                    String msg = Utilities.formatMoney(loseMoneyFormat, amount);
+
+                    player.getPlayer().sendMessage(msg);
+                }
+
+                return this;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Adds an amount of money to a player's balance
+     * Amount must be greater than 0
+     * If amount + current balance is greater than max allowed money, nothing will happen and method will return null
+     * @param amount Positive amount of money to be deposited
+     * @return UMPlayer Current instance of UMPlayer
+     */
+    public UMPlayer depositMoney(double amount) {
+        if (amount > 0) {
+            FileConfiguration config = UserManager.getPlugin().getConfig();
+            double curBalance = getBalance();
+            double max = config.getDouble("economy.maximum-money");
+
+            if (curBalance + amount <= max) { //if cur amount plus deposit is max or less, accept deposit
+                setBalance(curBalance + amount);
+
+                if (player.isOnline()) {
+                    String getMoneyFormat = config.getString("economy.get-money-message");
+                    String msg = Utilities.formatMoney(getMoneyFormat, amount);
+
+                    player.getPlayer().sendMessage(msg);
+                }
+
+                return this;
+            }
+        }
+
+        return null;
     }
 
     /**
