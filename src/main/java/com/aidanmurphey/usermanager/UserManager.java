@@ -1,9 +1,10 @@
 package com.aidanmurphey.usermanager;
 
+import com.aidanmurphey.usermanager.commands.CommandBalance;
+import com.aidanmurphey.usermanager.commands.UMCommand;
 import com.aidanmurphey.usermanager.listeners.ChatListener;
 import com.aidanmurphey.usermanager.listeners.ConnectionListener;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionAttachment;
@@ -17,12 +18,13 @@ import java.util.UUID;
 public class UserManager extends JavaPlugin {
     private static UserManager plugin;
     private static ArrayList<UMPlayer> registeredPlayers;
+    private static ArrayList<UMCommand> commands;
     private static HashMap<UUID, PermissionAttachment> attachments;
 
     @Override
     public void onEnable() {
         PluginDescriptionFile pdfFile = getDescription();
-        getLogger().info("Attempting to initialize " + pdfFile.getName() + ", version: " + pdfFile.getVersion() + "...");
+        getLogger().info("Attempting to initialize " + pdfFile.getName() + "...");
 
         saveDefaultConfig();
         plugin = this;
@@ -35,11 +37,23 @@ public class UserManager extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ChatListener(), this);
         Bukkit.getPluginManager().registerEvents(new ConnectionListener(), this);
 
+        setupCommands();
+
+        getLogger().info(pdfFile.getName() + " has been successfully initialized running version " + pdfFile.getVersion() + "!");
     }
 
     @Override
     public void onDisable() {
         getLogger().info("Shutting down " + getDescription().getName() + "...");
+    }
+
+    /**
+     * Initializes all of the plugin's command classes and adds them to the local commands list
+     */
+    private void setupCommands() {
+        commands = new ArrayList<>();
+
+        commands.add(new CommandBalance("balance", "bal"));
     }
 
     /**
@@ -84,11 +98,23 @@ public class UserManager extends JavaPlugin {
         return plugin;
     }
 
+    /**
+     * Runs when a command is entered
+     * @param sender The sender of the command
+     * @param command The command that was ran
+     * @param label The name of the command
+     * @param args The arguments entered along with the command
+     * @return boolean Command success
+     */
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (label.equalsIgnoreCase("umtest")) {
-            sender.sendMessage(ChatColor.GREEN + "You've successfully used the command!");
-        }
+    public boolean onCommand(CommandSender sender, Command command, final String label, String[] args) {
+        UMCommand umCommand = commands.stream()
+                .filter(cmd -> cmd.getAliases().contains(label.toLowerCase()))
+                .findAny().orElse(null);
+
+        if (umCommand != null)
+            umCommand.execute(sender, args);
+
         return true;
     }
 }

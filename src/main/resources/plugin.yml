@@ -7,11 +7,15 @@ website: AidanMurphey.com
 load: STARTUP
 
 commands:
-  umtest:
-    description: Temporary test command
-    permission: um.test
+  balance:
+    description: View your balance
+    aliases: [bal]
+    permission: um.balance
 
 permissions:
-  um.test:
-    description: Gives access to temp test command
+  um.balance:
+    description: Gives access to /balance command
+    default: true
+  um.balance.others:
+    description: Allows you to view the balance of others
     default: op
