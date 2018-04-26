@@ -3,9 +3,11 @@ package com.aidanmurphey.usermanager;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import java.sql.*;
+import java.util.List;
 import java.util.UUID;
 
 public class DatabaseHandler {
@@ -149,4 +151,43 @@ public class DatabaseHandler {
         }
         return umPlayer;
     }
+
+    /**
+     * Returns a list of the top N richest players
+     * @param max The number of richest players to get (min 1, max 10)
+     * @return List<UMPlayer> The list of the top N richest players
+     */
+    public static List<UMPlayer> getRichest(int max) {
+        if (max < 1) max = 1;
+        if (max > 10) max = 10;
+
+        openConnection();
+        try {
+            PreparedStatement sql = connection.prepareStatement("SELECT * FROM users ORDER BY balance DESC LIMIT ?;");
+            sql.setInt(1, max);
+
+            ResultSet result = sql.executeQuery();
+            List<UMPlayer> players = new ArrayList<>();
+            while (result.next()) {
+                UMPlayer umPlayer = new UMPlayer(
+                        UUID.fromString(result.getString("uuid")),
+                        Group.getGroup(result.getString("group")),
+                        result.getDouble("balance"),
+                        result.getLong("playtime"),
+                        result.getLong("first_seen"),
+                        result.getLong("last_seen")
+                );
+                players.add(umPlayer);
+            }
+
+            return players;
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+
+        return null;
+    }
+
 }

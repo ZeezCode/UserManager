@@ -15,6 +15,10 @@ commands:
     description: Send an amount of money to another player
     aliases: [sendmoney]
     permission: um.pay
+  balancetop:
+    description: Lists the top 10 richest players in order
+    aliases: [baltop]
+    permission: um.baltop
 
 permissions:
   um.balance:
@@ -25,4 +29,7 @@ permissions:
     default: op
   um.pay:
     description: Gives access to /pay command
+    default: true
+  um.baltop:
+    description: Gives acess to /baltop command
     default: true

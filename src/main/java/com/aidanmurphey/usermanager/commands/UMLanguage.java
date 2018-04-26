@@ -9,5 +9,6 @@ public class UMLanguage {
     public static final String ERROR_INCORRECT_USAGE = ChatColor.RED + "Incorrect command usage! Use: ";
     public static final String ERROR_MUST_BE_PLAYER = ChatColor.RED + "You must be a player to use this command!";
     public static final String ERROR_INSUFFICIENT_FUNDS = ChatColor.RED + "You do not have sufficient funds for this transaction!";
+    public static final String ERROR_UNKNOWN = ChatColor.RED + "An unknown error occurred while attempting to run this command!";
 
 }

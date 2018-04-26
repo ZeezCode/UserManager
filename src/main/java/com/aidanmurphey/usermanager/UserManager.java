@@ -1,8 +1,6 @@
 package com.aidanmurphey.usermanager;
 
-import com.aidanmurphey.usermanager.commands.CommandBalance;
-import com.aidanmurphey.usermanager.commands.CommandPay;
-import com.aidanmurphey.usermanager.commands.UMCommand;
+import com.aidanmurphey.usermanager.commands.*;
 import com.aidanmurphey.usermanager.exceptions.CommandFailedException;
 import com.aidanmurphey.usermanager.listeners.ChatListener;
 import com.aidanmurphey.usermanager.listeners.ConnectionListener;
@@ -57,6 +55,7 @@ public class UserManager extends JavaPlugin {
 
         commands.add(new CommandBalance("balance", "bal"));
         commands.add(new CommandPay("pay", "sendmoney"));
+        commands.add(new CommandBaltop("balancetop", "baltop"));
     }
 
     /**
