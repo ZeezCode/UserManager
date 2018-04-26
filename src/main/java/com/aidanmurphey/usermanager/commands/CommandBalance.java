@@ -1,6 +1,8 @@
 package com.aidanmurphey.usermanager.commands;
 
 import com.aidanmurphey.usermanager.UMPlayer;
+import com.aidanmurphey.usermanager.Utilities;
+import com.aidanmurphey.usermanager.exceptions.CommandFailedException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -23,36 +25,30 @@ public class CommandBalance implements UMCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
-        //balance (player)
-
+    public void execute(CommandSender sender, String[] args) throws CommandFailedException {
         Player target = null;
 
         if (args.length > 0) { //if specified player
             target = Bukkit.getPlayer(args[0]);
 
             //if sender didn't request own balance and doesn't have permission to view others' balance
-            if (target != sender && !sender.hasPermission("um.balance.others")) {
-                sender.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
-                return;
-            }
+            if (target != sender && !sender.hasPermission("um.balance.others"))
+                throw new CommandFailedException(UMLanguage.ERROR_NO_PERMISSION);
 
-            if (target == null) { //if target not found
-                sender.sendMessage(ChatColor.RED + "The specified player could not be found!");
-                return;
-            }
-        } else if (sender instanceof Player) { //no args and player used command
+            //if target not found
+            if (target == null)
+                throw new CommandFailedException(UMLanguage.ERROR_PLAYER_NOT_FOUND);
+        } else if (sender instanceof Player) //no args and player used command
             target = (Player) sender;
-        } else { //no args and console used command
-            sender.sendMessage(ChatColor.RED + "Missing arguments! Use /balance <player>");
-            return;
-        }
+        else //no args and console used command
+            throw new CommandFailedException(UMLanguage.ERROR_INCORRECT_USAGE + "/balance <player>");
 
         UMPlayer umPlayer = UMPlayer.getPlayer(target.getUniqueId());
+        String formatted = Utilities.formatMoney(null, umPlayer.getBalance());
         if (sender == target)
-            sender.sendMessage(ChatColor.GREEN + "Balance: " + umPlayer.getBalance());
+            sender.sendMessage(ChatColor.GREEN + "Balance: " + formatted);
         else
-            sender.sendMessage(ChatColor.GREEN + target.getName() + "'s Balance: " + umPlayer.getBalance());
+            sender.sendMessage(ChatColor.GREEN + target.getName() + "'s Balance: " + formatted);
     }
 
 }

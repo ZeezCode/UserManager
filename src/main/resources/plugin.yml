@@ -11,6 +11,10 @@ commands:
     description: View your balance
     aliases: [bal]
     permission: um.balance
+  pay:
+    description: Send an amount of money to another player
+    aliases: [sendmoney]
+    permission: um.pay
 
 permissions:
   um.balance:
@@ -19,3 +23,6 @@ permissions:
   um.balance.others:
     description: Allows you to view the balance of others
     default: op
+  um.pay:
+    description: Gives access to /pay command
+    default: true

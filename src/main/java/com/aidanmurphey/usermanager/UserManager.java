@@ -1,7 +1,9 @@
 package com.aidanmurphey.usermanager;
 
 import com.aidanmurphey.usermanager.commands.CommandBalance;
+import com.aidanmurphey.usermanager.commands.CommandPay;
 import com.aidanmurphey.usermanager.commands.UMCommand;
+import com.aidanmurphey.usermanager.exceptions.CommandFailedException;
 import com.aidanmurphey.usermanager.listeners.ChatListener;
 import com.aidanmurphey.usermanager.listeners.ConnectionListener;
 import org.bukkit.Bukkit;
@@ -29,8 +31,8 @@ public class UserManager extends JavaPlugin {
         saveDefaultConfig();
         plugin = this;
 
-        //if registeredPlayers doesn't already exist, create it
-        //this check exists so the list doesn't empty itself when an owner *stupidly* reloads the server
+        //if lists don't already exist, create them
+        //this check exists so the lists don't empty themselves when an owner *stupidly* reloads the server
         registeredPlayers = registeredPlayers != null ? registeredPlayers : new ArrayList<>();
         attachments = attachments != null ? attachments : new HashMap<>();
 
@@ -54,6 +56,7 @@ public class UserManager extends JavaPlugin {
         commands = new ArrayList<>();
 
         commands.add(new CommandBalance("balance", "bal"));
+        commands.add(new CommandPay("pay", "sendmoney"));
     }
 
     /**
@@ -112,8 +115,13 @@ public class UserManager extends JavaPlugin {
                 .filter(cmd -> cmd.getAliases().contains(label.toLowerCase()))
                 .findAny().orElse(null);
 
-        if (umCommand != null)
-            umCommand.execute(sender, args);
+        if (umCommand != null) {
+            try {
+                umCommand.execute(sender, args);
+            } catch(CommandFailedException e) {
+                sender.sendMessage(e.getMessage());
+            }
+        }
 
         return true;
     }

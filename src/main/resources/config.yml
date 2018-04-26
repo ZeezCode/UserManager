@@ -19,8 +19,8 @@ economy:
   currency-name-plural: 'Dollars'
   minimum-money: 0
   maximum-money: 100000000000000
-  get-money-message: '&aYou have received %AMOUNT% %CUR_NAME%!'
-  lose-money-message: '&aYou have spent %AMOUNT% %CUR_NAME%!'
+  get-money-message: '&aYou have received %MONEY%!'
+  lose-money-message: '&aYou have spent %MONEY%!'
 
 #Chat information
 chat:

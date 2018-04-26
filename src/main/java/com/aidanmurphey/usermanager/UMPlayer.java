@@ -93,7 +93,8 @@ public class UMPlayer {
      * @return UMPlayer Current instance of UMPlayer
      */
     public UMPlayer withdrawMoney(double amount) {
-        if (amount < 0) {
+        if (amount > 0) {
+            amount = Utilities.round(amount, 2);
             FileConfiguration config = UserManager.getPlugin().getConfig();
             double curBalance = getBalance();
             double min = config.getDouble("minimum-money");
@@ -111,7 +112,6 @@ public class UMPlayer {
                 return this;
             }
         }
-
         return null;
     }
 
@@ -124,6 +124,7 @@ public class UMPlayer {
      */
     public UMPlayer depositMoney(double amount) {
         if (amount > 0) {
+            amount = Utilities.round(amount, 2);
             FileConfiguration config = UserManager.getPlugin().getConfig();
             double curBalance = getBalance();
             double max = config.getDouble("economy.maximum-money");
