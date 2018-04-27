@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface UMCommand {
 
+    String getUsage();
+
     List<String> getAliases();
 
     void execute(CommandSender sender, String[] args) throws CommandFailedException;

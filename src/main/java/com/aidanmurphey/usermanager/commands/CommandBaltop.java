@@ -7,15 +7,21 @@ import com.aidanmurphey.usermanager.exceptions.CommandFailedException;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class CommandBaltop implements UMCommand {
 
+    private String usage;
     private List<String> aliases;
 
-    public CommandBaltop(String... aliases) {
-        this.aliases = Arrays.asList(aliases);
+    public CommandBaltop(String usage, List<String> aliases) {
+        this.usage = usage;
+        this.aliases = aliases;
+    }
+
+    @Override
+    public String getUsage() {
+        return usage;
     }
 
     @Override

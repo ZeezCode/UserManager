@@ -10,15 +10,21 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class CommandPay implements UMCommand {
 
+    private String usage;
     private List<String> aliases;
 
-    public CommandPay(String... aliases) {
-        this.aliases = Arrays.asList(aliases);
+    public CommandPay(String usage, List<String> aliases) {
+        this.usage = usage;
+        this.aliases = aliases;
+    }
+
+    @Override
+    public String getUsage() {
+        return usage;
     }
 
     @Override
@@ -35,7 +41,7 @@ public class CommandPay implements UMCommand {
 
         //if not enough args
         if (args.length < 2)
-            throw new CommandFailedException(UMLanguage.ERROR_INCORRECT_USAGE + "/pay <player> <amount>");
+            throw new CommandFailedException(UMLanguage.ERROR_INCORRECT_USAGE);
 
         Player target = Bukkit.getPlayer(args[0]);
         //if target doesn't exit
@@ -44,7 +50,7 @@ public class CommandPay implements UMCommand {
 
         //if amount specified isn't valid number
         if (!Utilities.isValidDouble(args[1]))
-            throw new CommandFailedException(UMLanguage.ERROR_INCORRECT_USAGE + "/pay <player> <amount>");
+            throw new CommandFailedException(UMLanguage.ERROR_INCORRECT_USAGE);
         double amount = Double.parseDouble(args[1]);
 
         if (amount <= 0)

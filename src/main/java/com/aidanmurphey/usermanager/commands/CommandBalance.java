@@ -8,15 +8,21 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class CommandBalance implements UMCommand {
 
+    private String usage;
     private List<String> aliases;
 
-    public CommandBalance(String... aliases) {
-        this.aliases = Arrays.asList(aliases);
+    public CommandBalance(String usage, List<String> aliases) {
+        this.usage = usage;
+        this.aliases = aliases;
+    }
+
+    @Override
+    public String getUsage() {
+        return usage;
     }
 
     @Override
@@ -41,7 +47,7 @@ public class CommandBalance implements UMCommand {
         } else if (sender instanceof Player) //no args and player used command
             target = (Player) sender;
         else //no args and console used command
-            throw new CommandFailedException(UMLanguage.ERROR_INCORRECT_USAGE + "/balance <player>");
+            throw new CommandFailedException(UMLanguage.ERROR_INCORRECT_USAGE);
 
         UMPlayer umPlayer = UMPlayer.getPlayer(target.getUniqueId());
         String formatted = Utilities.formatMoney(null, umPlayer.getBalance());

@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public class UserManager extends JavaPlugin {
@@ -51,11 +52,29 @@ public class UserManager extends JavaPlugin {
      * Initializes all of the plugin's command classes and adds them to the local commands list
      */
     private void setupCommands() {
-        commands = new ArrayList<>();
+        HashMap<String, Class<?>> classMap = new HashMap<>();
+        classMap.put("balance", CommandBalance.class);
+        classMap.put("pay", CommandPay.class);
+        classMap.put("balancetop", CommandBaltop.class);
+        classMap.put("economy", CommandEconomy.class);
 
-        commands.add(new CommandBalance("balance", "bal"));
-        commands.add(new CommandPay("pay", "sendmoney"));
-        commands.add(new CommandBaltop("balancetop", "baltop"));
+        commands = new ArrayList<>();
+        for (String commandName : getDescription().getCommands().keySet()) {
+            Command command = getCommand(commandName);
+            Class<?> commandClass = classMap.get(commandName);
+            try {
+                List<String> aliases = new ArrayList<>(command.getAliases());
+                aliases.add(command.getName());
+                //aliases now consists of command's aliases and name
+
+                UMCommand commandExecutor = (UMCommand) commandClass
+                        .getConstructor(String.class, List.class)
+                        .newInstance(command.getUsage(), aliases);
+                commands.add(commandExecutor);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -118,7 +137,11 @@ public class UserManager extends JavaPlugin {
             try {
                 umCommand.execute(sender, args);
             } catch(CommandFailedException e) {
-                sender.sendMessage(e.getMessage());
+                String msg = e.getMessage();
+                if (msg.equals(UMLanguage.ERROR_INCORRECT_USAGE))
+                    sender.sendMessage(msg + umCommand.getUsage());
+                else
+                    sender.sendMessage(msg);
             }
         }
 

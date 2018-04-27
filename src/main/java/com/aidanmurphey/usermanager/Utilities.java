@@ -5,6 +5,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.UUID;
 
 public class Utilities {
 
@@ -46,6 +47,20 @@ public class Utilities {
     public static boolean isValidDouble(String toParse) {
         try {
             Double.parseDouble(toParse);
+        } catch(Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Returns whether or not a given string is a valid UUID
+     * @param toParse String to be parsed
+     * @return boolean Whether or not the given String is a valid UUID
+     */
+    public static boolean isValidUUID(String toParse) {
+        try {
+            UUID.fromString(toParse);
         } catch(Exception e) {
             return false;
         }

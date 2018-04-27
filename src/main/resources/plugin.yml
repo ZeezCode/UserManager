@@ -11,14 +11,22 @@ commands:
     description: View your balance
     aliases: [bal]
     permission: um.balance
+    usage: /balance [player]
   pay:
     description: Send an amount of money to another player
     aliases: [sendmoney]
     permission: um.pay
+    usage: /pay <player> <amount>
   balancetop:
     description: Lists the top 10 richest players in order
     aliases: [baltop]
     permission: um.baltop
+    usage: /baltop
+  economy:
+    description: Manage the economy
+    aliases: [eco]
+    permission: um.economy
+    usage: /eco <give|set|reset> <uuid> [amount]
 
 permissions:
   um.balance:
@@ -31,5 +39,8 @@ permissions:
     description: Gives access to /pay command
     default: true
   um.baltop:
-    description: Gives acess to /baltop command
+    description: Gives access to /baltop command
     default: true
+  um.economy:
+    description: Gives access to /eco command
+    default: op
