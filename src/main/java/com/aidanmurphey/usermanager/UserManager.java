@@ -4,6 +4,7 @@ import com.aidanmurphey.usermanager.commands.*;
 import com.aidanmurphey.usermanager.exceptions.CommandFailedException;
 import com.aidanmurphey.usermanager.listeners.ChatListener;
 import com.aidanmurphey.usermanager.listeners.ConnectionListener;
+import com.aidanmurphey.usermanager.listeners.WorldListener;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -37,6 +38,7 @@ public class UserManager extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new ChatListener(), this);
         Bukkit.getPluginManager().registerEvents(new ConnectionListener(), this);
+        Bukkit.getPluginManager().registerEvents(new WorldListener(), this);
 
         setupCommands();
 

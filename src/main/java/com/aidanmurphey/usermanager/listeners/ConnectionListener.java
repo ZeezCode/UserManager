@@ -65,7 +65,7 @@ public class ConnectionListener implements Listener {
         Player p = e.getPlayer();
 
         //Save player's final data before they leave
-        UMPlayer.getPlayer(p.getUniqueId()).handleDisconnect();
+        UMPlayer.getPlayer(p.getUniqueId(), false).handleDisconnect();
 
         //Remove player's attachment from local list
         UserManager.removeAttachment(p.getUniqueId());

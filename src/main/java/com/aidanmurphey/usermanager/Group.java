@@ -105,7 +105,7 @@ public class Group {
      * @return boolean Whether or not the group has permission to build
      */
     public boolean canBuild() {
-        return config.getBoolean("groups" + name + ".info.canBuild");
+        return config.getBoolean("groups." + name + ".info.canBuild");
     }
 
     /**

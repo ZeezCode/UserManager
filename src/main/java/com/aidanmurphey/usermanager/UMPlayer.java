@@ -1,6 +1,7 @@
 package com.aidanmurphey.usermanager;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -104,9 +105,10 @@ public class UMPlayer {
 
                 if (player.isOnline()) {
                     String loseMoneyFormat = config.getString("economy.lose-money-message");
-                    String msg = Utilities.formatMoney(loseMoneyFormat, amount);
+                    loseMoneyFormat = loseMoneyFormat.replace("%MONEY%", Utilities.formatMoney(amount));
+                    loseMoneyFormat = ChatColor.translateAlternateColorCodes('&', loseMoneyFormat);
 
-                    player.getPlayer().sendMessage(msg);
+                    player.getPlayer().sendMessage(loseMoneyFormat);
                 }
 
                 return this;
@@ -134,9 +136,10 @@ public class UMPlayer {
 
                 if (player.isOnline()) {
                     String getMoneyFormat = config.getString("economy.get-money-message");
-                    String msg = Utilities.formatMoney(getMoneyFormat, amount);
+                    getMoneyFormat = getMoneyFormat.replace("%MONEY%", Utilities.formatMoney(amount));
+                    getMoneyFormat = ChatColor.translateAlternateColorCodes('&', getMoneyFormat);
 
-                    player.getPlayer().sendMessage(msg);
+                    player.getPlayer().sendMessage(getMoneyFormat);
                 }
 
                 return this;
@@ -215,11 +218,18 @@ public class UMPlayer {
     /**
      * Gets an instance of the UMPlayer object for a specific player
      * @param uuid UUID of player
+     * @param force Whether or not to still return information if player's offline
      * @return UMPlayer Instance of UNPlayer for requested user
      */
-    public static UMPlayer getPlayer(UUID uuid) {
+    public static UMPlayer getPlayer(UUID uuid, boolean force) {
         //if UMPlayer is online (they'll be in the registeredPlayers list)
-        return UserManager.getRegisteredPlayers().stream().filter(
-                player -> player.getUniqueId().equals(uuid)).findFirst().orElse(null);
+        UMPlayer umPlayer = UserManager.getRegisteredPlayers().stream().filter(
+                player -> player.getUniqueId().equals(uuid)
+        ).findFirst().orElse(null);
+
+        if (force && umPlayer == null) //player isn't online but we're supposed to check for offline too
+            umPlayer = DatabaseHandler.getPlayerData(uuid);
+
+        return umPlayer;
     }
 }

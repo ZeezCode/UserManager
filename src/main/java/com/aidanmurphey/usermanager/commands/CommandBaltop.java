@@ -41,7 +41,7 @@ public class CommandBaltop implements UMCommand {
         for (int i = 0; i < players.size(); i++) {
             UMPlayer umPlayer = players.get(i);
             String countPrefix = ChatColor.DARK_GRAY + "" + (i+1) + ") ";
-            String nameAndBalance = ChatColor.WHITE + umPlayer.getOfflinePlayer().getName() + " - " + Utilities.formatMoney(null, umPlayer.getBalance());
+            String nameAndBalance = ChatColor.WHITE + umPlayer.getOfflinePlayer().getName() + " - " + Utilities.formatMoney(umPlayer.getBalance());
             sender.sendMessage(countPrefix + nameAndBalance);
         }
     }

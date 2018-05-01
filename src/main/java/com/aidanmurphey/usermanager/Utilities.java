@@ -1,6 +1,5 @@
 package com.aidanmurphey.usermanager;
 
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.math.BigDecimal;
@@ -10,33 +9,24 @@ import java.util.UUID;
 public class Utilities {
 
     /**
-     * Given a format string, uses amount and config to insert variables to the format and activates color codes
-     * @param format String to use as format for message
-     * @param amount Amount of money being used in message
-     * @return String Fully formatted version of given String
+     * Returns the amount of money surrounded by the currency name or symbol
+     * @param amount Amount of money being used in return String
+     * @return String Formatted version of amount
      */
-    public static String formatMoney(String format, double amount) {
+    public static String formatMoney(double amount) {
         ConfigurationSection config = UserManager.getPlugin().getConfig().getConfigurationSection("economy");
-
-        String result = format != null ? format : "%MONEY%";
+        String result;
 
         boolean useSymbol = config.getBoolean("currency-use-symbol");
-        if (useSymbol) {
-            result = result.replace(
-                    "%MONEY%",
-                    config.getString("currency-symbol") + amount
-            );
-        } else {
+        if (!useSymbol) {
             String pluralOrSingleCurrencyName = amount == 1 ? "currency-name" : "currency-name-plural";
             String currencyName = config.getString(pluralOrSingleCurrencyName);
 
-            result = result.replace(
-                    "%MONEY%",
-                    amount + " " + currencyName
-            );
-        }
+            result = amount + " " + currencyName;
+        } else
+            result = config.getString("currency-symbol") + amount;
 
-        return ChatColor.translateAlternateColorCodes('&', result);
+        return result;
     }
 
     /**

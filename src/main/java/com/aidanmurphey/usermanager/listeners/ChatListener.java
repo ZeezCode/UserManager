@@ -20,7 +20,7 @@ public class ChatListener implements Listener {
         String chatFormat = UserManager.getPlugin().getConfig().getString("chat.format");
 
         Player p = e.getPlayer();
-        Group group = UMPlayer.getPlayer(p.getUniqueId()).getGroup();
+        Group group = UMPlayer.getPlayer(p.getUniqueId(), false).getGroup();
         String nameFormat = ChatColor.translateAlternateColorCodes('&', group.getPrefix() + p.getName() + group.getSuffix());
 
         chatFormat = chatFormat

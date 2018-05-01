@@ -52,7 +52,7 @@ public class CommandEconomy implements UMCommand {
             throw new CommandFailedException(UMLanguage.ERROR_INCORRECT_USAGE);
 
         UUID uuid = UUID.fromString(args[1]);
-        UMPlayer umPlayer = UMPlayer.getPlayer(uuid);
+        UMPlayer umPlayer = UMPlayer.getPlayer(uuid, false);
         if (umPlayer == null) //try to get from umPlayer first so we don't have to query database ^
             umPlayer = DatabaseHandler.getPlayerData(uuid);
 
@@ -87,7 +87,7 @@ public class CommandEconomy implements UMCommand {
             sender.sendMessage(ChatColor.GREEN
                     + "You've successfully "
                     + ( give ? "deposited " : "withdrew ")
-                    + Utilities.formatMoney(null, amount)
+                    + Utilities.formatMoney(amount)
                     + " from the player's account!"
             );
         } else if (action.equals("set") || action.equals("reset")) {
@@ -114,7 +114,7 @@ public class CommandEconomy implements UMCommand {
 
             sender.sendMessage(ChatColor.GREEN
                     + "You have successfully set the player's balance to: "
-                    + Utilities.formatMoney(null, amount));
+                    + Utilities.formatMoney(amount));
         }
     }
 

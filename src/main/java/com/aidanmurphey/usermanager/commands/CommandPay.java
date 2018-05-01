@@ -56,8 +56,8 @@ public class CommandPay implements UMCommand {
         if (amount <= 0)
             throw new CommandFailedException(ChatColor.RED + "The amount cannot be negative or 0!");
 
-        UMPlayer umPlayerSender = UMPlayer.getPlayer(p.getUniqueId());
-        UMPlayer umPlayerTarget = UMPlayer.getPlayer(target.getUniqueId());
+        UMPlayer umPlayerSender = UMPlayer.getPlayer(p.getUniqueId(), false);
+        UMPlayer umPlayerTarget = UMPlayer.getPlayer(target.getUniqueId(), false);
 
         ConfigurationSection configurationSection = UserManager.getPlugin().getConfig().getConfigurationSection("economy");
         double min = configurationSection.getDouble("minimum-money");

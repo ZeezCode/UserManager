@@ -49,8 +49,8 @@ public class CommandBalance implements UMCommand {
         else //no args and console used command
             throw new CommandFailedException(UMLanguage.ERROR_INCORRECT_USAGE);
 
-        UMPlayer umPlayer = UMPlayer.getPlayer(target.getUniqueId());
-        String formatted = Utilities.formatMoney(null, umPlayer.getBalance());
+        UMPlayer umPlayer = UMPlayer.getPlayer(target.getUniqueId(), false);
+        String formatted = Utilities.formatMoney(umPlayer.getBalance());
         if (sender == target)
             sender.sendMessage(ChatColor.GREEN + "Balance: " + formatted);
         else
