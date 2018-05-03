@@ -190,4 +190,33 @@ public class DatabaseHandler {
         return null;
     }
 
+    /**
+     * Creates tables in database necessary for plugin to run
+     * @return Whether or not database setup completed successfully
+     */
+    static boolean setupDatabase() {
+        openConnection();
+        try {
+            PreparedStatement sql = connection.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS `users` ("
+                        + "`uuid` char(36) NOT NULL DEFAULT '',"
+                        + "`group` varchar(64) NOT NULL DEFAULT '',"
+                        + "`balance` double NOT NULL,"
+                        + "`playtime` bigint(20) NOT NULL,"
+                        + "`first_seen` bigint(20) NOT NULL,"
+                        + "`last_seen` bigint(20) NOT NULL,"
+                        + "PRIMARY KEY (`uuid`)"
+                    + ") ENGINE=InnoDB DEFAULT CHARSET=latin1;"
+            );
+            sql.execute();
+            sql.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            closeConnection();
+        }
+        return true;
+    }
+
 }

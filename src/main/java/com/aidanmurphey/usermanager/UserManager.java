@@ -31,6 +31,11 @@ public class UserManager extends JavaPlugin {
         saveDefaultConfig();
         plugin = this;
 
+        if (!DatabaseHandler.setupDatabase()) {
+            getLogger().warning("An error occurred during database setup! Disabling plugin...");
+            Bukkit.getPluginManager().disablePlugin(this);
+        }
+
         //if lists don't already exist, create them
         //this check exists so the lists don't empty themselves when an owner *stupidly* reloads the server
         registeredPlayers = registeredPlayers != null ? registeredPlayers : new ArrayList<>();
